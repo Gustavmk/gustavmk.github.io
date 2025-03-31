@@ -63,6 +63,7 @@ jobs:
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/" \
             --cacheDir "${{ runner.temp }}/hugo_cache"
+        working-directory: ./site
       - name: Cache Save
         id: cache-save
         uses: actions/cache/save@v4
@@ -73,7 +74,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./site/public
 
 
   deploy:
