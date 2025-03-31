@@ -1,4 +1,38 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://drylabs.dev/'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
-theme = "void"
+title = 'Blog do Kuno'
+theme = "hugo-discaptive"
+
+
+[params]
+  github = 'https://github.com/Gustavmk'
+  username = 'Gustavmk'
+
+  # To enable giscus, the GitHub-discussions-based comment section,
+  # input the repository for the discussions below. For more details, see
+  # https://giscus.app
+  [params.giscus]
+    repo = 'gustavmk.github.io'
+    repoId = '722559562'
+    category = 'Blog'
+    categoryId = '[ENTER CATEGORY ID HERE]'
+    mapping = 'pathname'
+    reactionsEnabled = '1'
+    inputPosition = 'bottom'
+    theme = 'light'
+    lang = 'en'
+
+[pagination]
+  pagerSize = 5  # Specify the max number of rows to be returned in list
+
+
+[[menus.main]]
+  name = 'Tags'
+  url = '/tags'
+  weight = 2
+
+[[menus.main]]
+  name = 'About'
+  url = '/about'
+  weight = 3
+

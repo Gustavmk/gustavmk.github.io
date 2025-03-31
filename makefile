@@ -1,4 +1,9 @@
 
 install-theme:
+    cd site;
+    hugo new theme
+
+setup-hugo:
     cd site
-    hugo new theme $1
+    hugo server --buildDrafts
+    hugo server -D
