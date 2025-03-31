@@ -3,6 +3,9 @@ languageCode = 'en-us'
 title = 'Blog do Kuno'
 theme = "hugo-discaptive"
 
+caches:
+  images:
+    dir: :cacheDir/images
 
 [params]
   github = 'https://github.com/Gustavmk'
