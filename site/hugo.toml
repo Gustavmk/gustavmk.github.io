@@ -12,10 +12,10 @@ theme = "hugo-discaptive"
   # https://giscus.app
   [params.giscus]
     repo = 'gustavmk.github.io'
-    repoId = '722559562'
+    repoId = 'R_kgDOKxFiSg'
     category = 'Blog'
-    categoryId = '[ENTER CATEGORY ID HERE]'
-    mapping = 'pathname'
+    categoryId = 'DIC_kwDOKxFiSs4Conj3'
+    mapping = 'title'
     reactionsEnabled = '1'
     inputPosition = 'bottom'
     theme = 'light'
