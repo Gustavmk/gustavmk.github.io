@@ -1,7 +1,6 @@
 ---
 title: "About me"
 summary: "README"
-tags: [ "notes" ]
 date: "2025-03-30T02:25:00+03:00"
 ---
 
