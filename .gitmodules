@@ -1,3 +1,6 @@
-[submodule "assets/lib"]
-	path = assets/lib
-	url = https://github.com/cotes2020/chirpy-static-assets.git
+[submodule "site/themes/void"]
+	path = site/themes/void
+	url = https://github.com/Daucloud/hugo-theme-void
+[submodule "site/themes/hugo-discaptive"]
+	path = site/themes/hugo-discaptive
+	url = https://github.com/discaptive/hugo-discaptive.git
