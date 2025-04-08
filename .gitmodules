@@ -1,4 +1,7 @@
 [submodule "hugo-blog-awesome"]
  	path = themes/hugo-blog-awesome
- 	url = git@github.comgithub.com:hugo-sid/hugo-blog-awesome.git
+ 	url = git@github.com:hugo-sid/hugo-blog-awesome.git
   branch = main
+[submodule "themes/hugo-blog-awesome"]
+	path = themes/hugo-blog-awesome
+	url = git@github.com:hugo-sid/hugo-blog-awesome.git
