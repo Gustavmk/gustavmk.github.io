@@ -13,7 +13,6 @@ defaultContentLanguage = "en-gb"
 enableEmoji = true
 ignoreErrors = ["additional-script-loading-error"] # ignore error of loading additional scripts.
 
-
 [services]
 
 #[params]
