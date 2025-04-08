@@ -2,6 +2,7 @@
 title: "About me"
 summary: "README"
 date: "2025-03-30T02:25:00+03:00"
+toc: false
 ---
 
 
