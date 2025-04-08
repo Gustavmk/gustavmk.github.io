@@ -1,10 +1,8 @@
 ---
-layout: post
 title:  "Minha primeira publicação!"
-categories: [geral]
 tags: [blog]
 date:  2023-11-23
-comments: true
+#comments: true
 ---
 
 Bem-vindo ao meu espaço. O **Hello world** finalmente saiu do forno!
