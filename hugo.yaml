@@ -1,0 +1,130 @@
+baseURL: "https://drylabs.dev/"
+title: "Blog do Kuno"
+theme: "hugo-blog-awesome"
+timeZone: "America/Sao_Paulo"
+summaryLength: 10
+
+languageCode: "en-us"
+defaultContentLanguage: "en-us"
+
+enableEmoji: true
+ignoreErrors:
+  - "additional-script-loading-error"
+
+services: {}
+
+markup:
+  highlight:
+    noClasses: false
+  goldmark:
+    renderer:
+      unsafe: true
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+    ordered: false
+
+Languages:
+  en-us:
+    languageName: "English"
+    languageCode: "en-us"
+    contentDir: "content/en"
+    weight: 1
+    menu:
+      main:
+        - pageRef: "/"
+          name: "Home"
+          url: "/"
+          weight: 10
+        - pageRef: "posts"
+          name: "Posts"
+          url: "/posts/"
+          weight: 20
+        - pageRef: "about"
+          name: "About"
+          url: "/about/"
+          weight: 30
+    params:
+      sitename: "DryLabs"
+      defaultColor: "dark"
+      description: "Minimal Hugo blog theme with light and dark mode support"
+      mainSections:
+        - "posts"
+      toc: true
+      tocOpen: false
+      goToTop: true
+      additionalScripts:
+        - "js/custom.js"
+        - "js/custom-2.js"
+      dateFormat: ""
+      rssFeedDescription: "summary"
+      author:
+        avatar: "avatar.jpg"
+        intro: "Awesome hugo blog"
+        name: "Gustavo Kuno"
+        description: "A fast, minimalistic Hugo theme with light and dark mode support, for running a personal site or blog."
+      webmanifest:
+        name: "sitename"
+        short_name: "sitename"
+        start_url: "/"
+        theme_color: "#434648"
+        background_color: "#fff"
+        display: "standalone"
+
+  pt-br:
+    languageName: "Brazilian"
+    languageCode: "pt-br"
+    contentDir: "content/br"
+    weight: 1
+    menu:
+      main:
+        - pageRef: "/"
+          name: "Início"
+          url: "/"
+          weight: 10
+        - pageRef: "posts"
+          name: "Publicações"
+          url: "/posts/"
+          weight: 20
+        - pageRef: "about"
+          name: "Sobre"
+          url: "/about/"
+          weight: 30
+    params:
+      sitename: "DryLabs"
+      defaultColor: "dark"
+      description: "Um tema Hugo veloz e minimalista com suporte a modo claro e escuro para rodar um blog ou site pessoal"
+      mainSections:
+        - "posts"
+      toc: true
+      tocOpen: false
+      goToTop: true
+      additionalScripts:
+        - "js/custom.js"
+        - "js/custom-2.js"
+      dateFormat: "2 January 2006"
+      rssFeedDescription: "summary"
+      author:
+        avatar: "avatar.jpg"
+        intro: "Awesome hugo blog"
+        name: "Gustavo Kuno"
+        description: "Um tema Hugo veloz e minimalista com suporte a modo claro e escuro para rodar um blog ou site pessoal"
+      webmanifest:
+        name: "sitename"
+        short_name: "sitename"
+        start_url: "/"
+        theme_color: "#434648"
+        background_color: "#fff"
+        display: "standalone"
+
+params:
+  browserconfig:
+    TileColor: "#2d89ef"
+
+socialIcons:
+  - name: "github"
+    url: "https://github.com/gustavmk"
+  - name: "twitter"
+    url: "https://twitter.com"
+  - name: "Rss"
+    url: "/index.xml"

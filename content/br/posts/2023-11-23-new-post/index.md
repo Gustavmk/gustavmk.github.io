@@ -1,6 +1,6 @@
 ---
-title:  "Minha primeira publicação!"
-date:  2023-11-23
+title: "Minha primeira publicação!"
+date: 2023-11-23
 #comments: true
 toc: false
 ---
