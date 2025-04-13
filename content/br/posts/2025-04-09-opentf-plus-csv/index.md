@@ -26,16 +26,11 @@ Todos os exemplos estão disponíveis no repositório **[github.com/drylabs/post
 
 No final desse artigo você aprenderá a consumir CSV usando o Tofu para declarar sua infraestrutura como código em seus projetos. 
 
+## Porque CSVs são mais elegantes do que list(objects) tradicionais no Terraform
 
-## Porque CSVs são mais elegantes do que list(maps) tradicionais no Terraform
+No Tofu, uma estrutura muito útil para modelar dados complexos é o tipo **list of objects** — ou seja, uma lista onde cada item é um mapa (dicionário) com chaves e valores. 
 
-No Tofu, uma estrutura muito útil para modelar dados complexos é o tipo **list maps** — ou seja, uma lista onde cada item é um mapa (dicionário) com chaves e valores. 
-
-Tradicionalmente, você poderia definir uma lista de mapas assim:
-
-### Exemplo de uma lista de mapas. 
-
-Vamos entender melhor como trabalhar com isso com o exemplo abaixo.
+Tradicionalmente, você poderia definir uma lista de objetos similar ao modelo a seguir.
 
 ```hcl
 variable "dns_records" {
@@ -59,7 +54,9 @@ variable "dns_records" {
   ]
 }
 ```
-O que acontece nesse exemplo, é que você já utilizou três linhas de código para definir apenas um registro dentro do list(map). Agora, imagine que você tenha 100 registros DNS para criar. Você teria que repetir esse padrão 100 vezes, sinigicando n * 3, totalizando 300 linhas. Essa é uma situação que você poderá enfrentar caso não utilize o CSV.
+> Vamos entender melhor como trabalhar com isso com o exemplo abaixo.
+
+O que acontece nesse exemplo, é que você já utilizou três linhas de código para definir apenas um registro dentro do *string(object)*. Agora, imagine que você tenha 100 registros DNS para criar. Você teria que repetir esse padrão 100 vezes, sinigicando n * 3, totalizando 300 linhas. Essa é uma situação que você poderá enfrentar caso não utilize o CSV.
 
 Comma-Separated Values (CSV) é um formato de arquivo que armazena dados tabulares em texto simples. Ele é amplamente utilizado para transferir dados entre diferentes sistemas e aplicativos, especialmente em planilhas e bancos de dados.
 
@@ -89,7 +86,7 @@ route5,1.1.1.5/32,VirtualAppliance,10.0.0.1
 O *Local* será responsável por definir o valor *vnet_routes*, onde podemos relacionar diversas novas vezes a partir dele.
 O arquivo CSV precsia ser armazenado a partir do diretório raiz do modulo em referência.
 
-Para transformar a listagem acima no formato CSV. Utilizaremos a função *`csvdecode()`*. Dessa forma, o Tofu criará uma list(map(string)) automaticamente. 
+Para transformar a listagem acima no formato CSV. Utilizaremos a função *`csvdecode()`*. Dessa forma, o Tofu criará uma lista de objetos automaticamente. 
 
 Para fins de demonstração, criei um output para demonstrar o resultado após a conversão do CSV.
 
@@ -104,12 +101,12 @@ output "vnet_routes" {
 ```
 | ![tofu_output](output_locals.png) | 
 |:--:| 
-| *Exemplo Tofu output de csv para string(map)* |
+| *Exemplo Tofu output de csv para list(object)* |
 
 
 #### Iteração da lista
 
-Após a definição dos nossos valores na string(map), faremos o consumo dela no bloco de recurso que declararemos a route table. 
+Após a definição dos nossos valores na list(object), faremos o consumo dela no bloco de recurso que declararemos a route table. 
 
 ```hcl
 resource "azurerm_route" "vnet_routes" {
@@ -169,7 +166,7 @@ locals {
 ```
 
 - 🔍 Nesse exemplo estamos definindo em locals duas listas separadas. A primeira lista *csv_dns_zone_type_cname_drylabs_dev*, para finalidade de registros como CNAME e a segunda lista *csv_dns_zone_type_a_drylabs_dev* para tipos de registro A. Nesse etapa não estão codificadas como csv, porém contem todo o conteúdo necessário para serem consumidas como CSV.
-- 🔍 Ainda em *locals*, os valores *dns_zone_type_cname_drylabs_dev e dns_zone_type_a_drylabs_dev* são definidos como `csvdecode()`, respectivamente. Isso converte as strings em listas de mapas, permitindo o acesso aos dados de forma mais fácil.
+- 🔍 Ainda em *locals*, os valores *dns_zone_type_cname_drylabs_dev e dns_zone_type_a_drylabs_dev* são definidos como `csvdecode()`, respectivamente. Isso converte as strings em listas de objetos, permitindo o acesso aos dados de forma mais fácil.
 
 #### Iteração da lista
 
