@@ -93,7 +93,7 @@ Languages:
     params:
       sitename: "DryLabs"
       defaultColor: "dark"
-      description: "Um tema Hugo veloz e minimalista com suporte a modo claro e escuro para rodar um blog ou site pessoal"
+      description: "Hello world!"
       mainSections:
         - "posts"
       toc: true
@@ -106,9 +106,9 @@ Languages:
       rssFeedDescription: "summary"
       author:
         avatar: "avatar.jpg"
-        intro: "Awesome hugo blog"
+        intro: "DRYLABS"
         name: "Gustavo Kuno"
-        description: "Um tema Hugo veloz e minimalista com suporte a modo claro e escuro para rodar um blog ou site pessoal"
+        description: "Let's go straight to the point"
       webmanifest:
         name: "sitename"
         short_name: "sitename"
