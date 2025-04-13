@@ -13,6 +13,7 @@ toc: false
 >
 > [The openTofu Manifesto](https://opentofu.org/manifesto/)
 
+
 ## ✨ Introdução 
 
 Há pessoas que têm um amor incontrolável por planilhas. Pois é… acabei me envolvendo nesse mundo também. Desde que comecei a trabalhar com *infraestrutura como código* (IaC), sempre procurei formas de automatizar tarefas repetitivas e agilizar processos, e, durante esse caminho de transiçaõ de controles por fora do código, estavam em planilhas, e as opções que eu estava trabalhando era muito verboso, mesmo reutilizando código não era prático como ler uma planilha.
@@ -26,13 +27,13 @@ Todos os exemplos estão disponíveis no repositório [github.com/drylabs/posts]
 No final desse artigo você aprenderá a consumir CSV usando o Tofu para declarar sua infraestrutura como código em seus projetos. 
 
 
-## 🧮 Porque CSVs são mais elegantes do que list(maps) tradicionais no Terraform
+## 🔢Porque CSVs são mais elegantes do que list(maps) tradicionais no Terraform
 
-No Tofu, uma estrutura muito útil para modelar dados complexos é o tipo **list of maps** — ou seja, uma lista onde cada item é um mapa (dicionário) com chaves e valores. 
+No Tofu, uma estrutura muito útil para modelar dados complexos é o tipo **list maps** — ou seja, uma lista onde cada item é um mapa (dicionário) com chaves e valores. 
 
 Tradicionalmente, você poderia definir uma lista de mapas assim:
 
-#### 🔢 Exemplo de uma lista de mapas. 
+### Exemplo de uma lista de mapas. 
 
 Vamos entender melhor como trabalhar com isso com o exemplo abaixo.
 
@@ -72,8 +73,6 @@ Essa estrutura é perfeitamente representada também por tabelas e planilhas. Os
 
 ## 📁Exemplo 1 – Criando Entradas na Route Table com CSV
 
-### CSV + mapping
-
 Antes de tudo, vamos criar o nosso arquivo CSV chamado `vnet_routes.csv`, com as colunas necessárias:
 
 ```csv
@@ -87,35 +86,33 @@ route5,1.1.1.5/32,VirtualAppliance,10.0.0.1
 
 > 💡Esse arquivo precisa estar no diretório raiz do seu módulo tf
 
-### Buscando csv e armazenando e decodificando ele no OpenTofu
-
-Local value que define o nome *vnet_routes*, onde podemos relacionar diversas novas vezes a partir dele.
+O *Local* será responsável por definir o valor *vnet_routes*, onde podemos relacionar diversas novas vezes a partir dele.
 O arquivo CSV precsia ser armazenado a partir do diretório raiz do modulo em referência.
+
+Para transformar a listagem acima no formato CSV. Utilizaremos a função `csvdecode()`. Dessa forma, o Tofu criará uma list(map(string)) automaticamente. 
+
+Para fins de demonstração, criei um output para demonstrar o resultado após a conversão do CSV.
 
 ```hcl
 locals {
   vnet_routes = csvdecode(file("${path.module}/vnet_routes.csv"))
 }
-```
 
-> 📂 Ao usar `csvdecode()`, o Tofu já cria um list(map(string)) automaticamente. 
-
-Para fins de demonstração, criei um output para demonstrar o resultado após a conversão do CSV.
-
-```hcl
-output "csv_vnet_routes" {
+output "vnet_routes" {
   value = local.vnet_routes
 }
 ```
 
 ![tofu_output](output_locals.png)
+> Exemplo de output do locals
 
+Após a definição dos nossos valores na string(map), faremos o consumo dela no bloco de recurso que declararemos a route table. 
 
-1. Consumindo o locals na route table
+> Código copiado do repositório para fins de demonstração.
 
 ```hcl
 resource "azurerm_route" "vnet_routes" {
-  for_each            = { for routes in local.csv_vnet_routes : routes.route_name => routes } 
+  for_each            = { for routes in local.vnet_routes : routes.route_name => routes } 
 
   route_table_name    = azurerm_route_table.main.name
   resource_group_name = azurerm_resource_group.main.name
@@ -130,11 +127,13 @@ resource "azurerm_route" "vnet_routes" {
 
 ### 🔍 O que está acontecendo?
 
+Para ajudar no entendimento, vamos analisar os principais trechos desse código. 
+
 #### Expressão for_each
 
-`for_each = { for routes in local.csv_vnet_routes : routes.route_name => routes }`
+`for_each = { for routes in local.vnet_routes : routes.route_name => routes }`
 
-Nessa parte o OpenTofu itera sobre os dados do local.csv_vnet_routes. Desta forma, é criado um mapa usando route_name como chave. Assim, cada rota será gerenciada de forma independente. Iremos observar esse comportamento mais adiante, após a aplicação do código.
+Nessa parte o OpenTofu itera sobre os dados do local.vnet_routes. Desta forma, é criado um mapa usando route_name como chave. Assim, cada rota será gerenciada de forma independente. Iremos observar esse comportamento mais adiante, após a aplicação do código.
 
 #### Expressão ternária
 
@@ -145,6 +144,7 @@ Nessa parte o OpenTofu itera sobre os dados do local.csv_vnet_routes. Desta form
 
 ## Exemplo 2 - Criando entradas de DNS usando locals para definir um valor csv sem ter um arquivo csv no repositório
 
+Esse exemplo é semelhante ao anterior, mas aqui não utilizamos um arquivo CSV. Em vez disso, definimos os valores diretamente no código usando `Heredoc Strings`.
 
 ```hcl
 locals {
@@ -167,13 +167,8 @@ locals {
 }
 ```
 
-### 🔍 O que está acontecendo?
-
-1. Nesse exemplo estamos definindo em locals uma duas listagens no utilizando `Heredoc Strings`. As listas *csv_dns_zone_type_cname_drylabs_dev e csv_dns_zone_type_a_drylabs_dev* nesse etapa não estão codificadas como csv, porém contem todo o conteúdo necessário para serem consumidas como CSV.
-
-2. Ainda em *locals*, os valores dns_zone_type_cname_drylabs_dev e dns_zone_type_a_drylabs_dev são definidos como `csvdecode()`, respectivamente. Isso converte as strings em listas de mapas, permitindo o acesso aos dados de forma mais fácil.
-
-
+- 🔍 Nesse exemplo estamos definindo em locals duas listas separadas. A primeira lista *csv_dns_zone_type_cname_drylabs_dev*, para finalidade de registros como CNAME e a segunda lista *csv_dns_zone_type_a_drylabs_dev* para tipos de registro A. Nesse etapa não estão codificadas como csv, porém contem todo o conteúdo necessário para serem consumidas como CSV.
+- 🔍 Ainda em *locals*, os valores *dns_zone_type_cname_drylabs_dev e dns_zone_type_a_drylabs_dev* são definidos como `csvdecode()`, respectivamente. Isso converte as strings em listas de mapas, permitindo o acesso aos dados de forma mais fácil.
 
 
 ```hcl
