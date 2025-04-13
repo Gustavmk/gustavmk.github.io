@@ -16,3 +16,4 @@ As linguagens com as quais eu trabalho principalmente são Python, Powershell e 
 
 Além de ter super poderes no terminal, também sou corredor e busco uma vida integra e saudável.
 
+
