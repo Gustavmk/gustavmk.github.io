@@ -17,8 +17,12 @@ Neste guia, vou mostrar como você pode usar dados de um CSV para criar **rotas 
 
 Todos os exemplos estão disponíveis no repositório [github.com/drylabs/posts](https://github.com/Gustavmk/drylabs-site-examples/tree/tofu-plus-csv/tf/tofu-plus-csv).
 
+No final desse artigo você aprenderá a consumir CSV com OpenTofu/Terraform em seus projetos. 
+
 
 ## 📁Exemplo 1 – Criando Entradas na Route Table com CSV
+
+1. CSV + mapping
 
 Antes de tudo, vamos criar o nosso arquivo CSV chamado `vnet_routes.csv`, com as colunas necessárias:
 
@@ -33,7 +37,7 @@ route5,1.1.1.5/32,VirtualAppliance,10.0.0.1
 
 > 💡Esse arquivo precisa estar no diretório raiz do seu módulo tf
 
-- Armazenando informação em um Local
+2. Buscando csv e armazenando e decodificando ele no OpenTofu
 
 Local value que define o nome *vnet_routes*, onde podemos relacionar diversas novas vezes a partir dele.
 O arquivo CSV precsia ser armazenado a partir do diretório raiz do modulo em referência.
@@ -44,33 +48,37 @@ locals {
 }
 ```
 
-- Aplicar excelll
-1. This is a for_each loop that references the CSV file from the local value.
-  - I've also set it to assign a key of the route_name (from the CSV file) to each route, making a map (key/value pair) of the data.
-  - This lets me change or destroy routes without having to re-create all of the routes, as you would with a list.
-2. Cada linha do csv entra no laço definido por *função* 'each.value.' + coluna do csv.
-3. Ternário. Função condicional que validará caso o tipo definido da coluna seja "VirtualAppliance". Quais são as possiveis condições:
-   - Caso 1: Se "virtualAppliance" for verdadeiro, então ele definirá o next hop definido na ultima coluna do csv
-   - Caso 2: Se "virtualAppliance" for False, então não haverá a configuraçõ da regra de Next Hop na rota.  
-   
+1. Consumindo o locals na route table
+
 ```terraform
 resource "azurerm_route" "vnet_routes" {
+  for_each            = { for routes in local.csv_vnet_routes : routes.route_name => routes } 
 
-  # 1
-  for_each               = { for routes in local.vnet_routes : routes.route_name => routes }
+  route_table_name    = azurerm_route_table.main.name
+  resource_group_name = azurerm_resource_group.main.name
 
-  # 2
   name                   = each.value.route_name
-  resource_group_name    = each.value.resource_group_name
-  route_table_name       = each.value.route_table_name
   address_prefix         = each.value.address_prefix
   next_hop_type          = each.value.next_hop_type
-
-  # 3
-  next_hop_in_ip_address = (each.value.next_hop_type == "VirtualAppliance") == true ? each.value.next_hop_in_ip_address : null
-
+  
+  next_hop_in_ip_address = (each.value.next_hop_type == "VirtualAppliance") == true ? each.value.next_hop_ip : null
 }
 ```
+
+### 🔍 O que está acontecendo aqui?
+
+#### Expressão for_each
+
+`for_each = { for routes in local.csv_vnet_routes : routes.route_name => routes }`
+
+Nessa parte o OpenTofu itera sobre os dados do local.csv_vnet_routes. Desta forma, é criado um mapa usando route_name como chave. Assim, cada rota será gerenciada de forma independente. Iremos observar esse comportamento mais adiante, após a aplicação do código.
+
+#### Expressão ternária
+
+`next_hop_in_ip_address = (each.value.next_hop_type == "VirtualAppliance") == true ? each.value.`
+
+  - Se next_hop_type for "VirtualAppliance", o IP de próximo salto (next_hop_ip) será usado.
+  - Caso contrário, o campo será null.
 
 
 ## Exemplo 2 - Criando entradas de DNS usando locals para definir um valor csv sem ter um arquivo csv no repositório
