@@ -47,7 +47,7 @@ Languages:
     params:
       sitename: "DryLabs"
       defaultColor: "dark"
-      description: "Minimal Hugo blog theme with light and dark mode support"
+      description: "Hello World!"
       mainSections:
         - "posts"
       toc: true
@@ -60,9 +60,9 @@ Languages:
       rssFeedDescription: "summary"
       author:
         avatar: "avatar.jpg"
-        intro: "Awesome hugo blog"
+        intro: "DRYLABS"
         name: "Gustavo Kuno"
-        description: "A fast, minimalistic Hugo theme with light and dark mode support, for running a personal site or blog."
+        description: "Let's go straight to the point"
       webmanifest:
         name: "sitename"
         short_name: "sitename"

@@ -214,3 +214,5 @@ Chegamos ao final do nosso guia prático. Agora você tem uma compreensão sóli
 - [OpenTofu - for_each](https://opentofu.org/docs/language/meta-arguments/for_each/)
 - [OpenTofu - Ternário / Conditional Expressions](https://opentofu.org/docs/language/expressions/conditionals/)
 - [OpenTofu - Heredoc Strings ](https://opentofu.org/docs/language/expressions/strings/#indented-heredocs)
+- [DRY Coding with Terraform](https://jloudon.com/cloud/HashiTalks-ANZ-DRY-Coding-with-Terraform-CSVs-ForEach/)
+- 
