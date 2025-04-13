@@ -106,7 +106,7 @@ output "vnet_routes" {
 
 #### Iteração da lista
 
-Após a definição dos nossos valores na list(object), faremos o consumo dela no bloco de recurso que declararemos a route table. 
+Após a definição dos nossos valores na list(object), será feito o consumo dela no bloco de recurso que foi declarado a route table. 
 
 ```hcl
 resource "azurerm_route" "vnet_routes" {
