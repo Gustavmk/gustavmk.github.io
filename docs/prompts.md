@@ -5,11 +5,9 @@ PADRÔES:
 - usar emojis, entretanto apenas para os tópicos. Evitar o uso demassiado de emojis no documento;
 - Use citações para as recomendações dadas baseado nas documentosções oficiais de cada solução debatida;
 - Sempre avalie a concordancia do texto proposto e do texto gerado para uma linguagem menos formal, para possibilitar mais enfase no entendimento do tópico;
-- A resposta precisa ser feita completamente em formato .MD (Markdown).
+- O formato da resposta deverá ser em MARKDOWN. 
 
-OBJETIVO: O objetivo é fornecer um guia abrangente sobre como trabalhar com arquivos CSV no Terraform, incluindo a leitura, manipulação e uso de dados CSV em recursos do Terraform.
-
-O formato da resposta deverá ser em MARKDOWN. 
+OBJETIVO: 
 
 
 CONTEÚDO: 

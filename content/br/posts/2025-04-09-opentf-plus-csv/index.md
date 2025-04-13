@@ -5,7 +5,7 @@ toc: false
 #comments: true
 ---
 
-# 🧾Guia Prático: Usando Arquivos CSV no OpenTofu
+# Guia Prático: Usando Arquivos CSV no OpenTofu
 
 **Terraform / OpenTF/OpenTofu**: O que será debatido aqui, vou denominar simplesmente como Tofu e ponto. 
 
@@ -14,7 +14,7 @@ toc: false
 > [The openTofu Manifesto](https://opentofu.org/manifesto/)
 
 
-## ✨ Introdução 
+## Introdução 
 
 Há pessoas que têm um amor incontrolável por planilhas. Pois é… acabei me envolvendo nesse mundo também. Desde que comecei a trabalhar com *infraestrutura como código* (IaC), sempre procurei formas de automatizar tarefas repetitivas e agilizar processos, e, durante esse caminho de transiçaõ de controles por fora do código, estavam em planilhas, e as opções que eu estava trabalhando era muito verboso, mesmo reutilizando código não era prático como ler uma planilha.
 
@@ -22,12 +22,12 @@ Foi aí que, há alguns anos, descobri que o [OpenTofu](https://opentofu.org/) p
 
 Neste guia, vou mostrar como você pode usar dados de um CSV para criar **rotas em uma Route Table** e **entradas de DNS**, de maneira fácil e replicável.
 
-Todos os exemplos estão disponíveis no repositório [github.com/drylabs/posts](https://github.com/Gustavmk/drylabs-site-examples/tree/tofu-plus-csv/tf/tofu-plus-csv).
+Todos os exemplos estão disponíveis no repositório **[github.com/drylabs/posts](https://github.com/drylabs/code-examples/tree/main/tf/tofu-plus-csv)**.
 
 No final desse artigo você aprenderá a consumir CSV usando o Tofu para declarar sua infraestrutura como código em seus projetos. 
 
 
-## 🔢Porque CSVs são mais elegantes do que list(maps) tradicionais no Terraform
+## Porque CSVs são mais elegantes do que list(maps) tradicionais no Terraform
 
 No Tofu, uma estrutura muito útil para modelar dados complexos é o tipo **list maps** — ou seja, uma lista onde cada item é um mapa (dicionário) com chaves e valores. 
 
@@ -63,7 +63,7 @@ O que acontece nesse exemplo, é que você já utilizou três linhas de código 
 
 Comma-Separated Values (CSV) é um formato de arquivo que armazena dados tabulares em texto simples. Ele é amplamente utilizado para transferir dados entre diferentes sistemas e aplicativos, especialmente em planilhas e bancos de dados.
 
-Essa estrutura é perfeitamente representada também por tabelas e planilhas. Os arquivos no formato CSV, podem ser automaticamente convertidos para esse formato com a função `csvdecode()` que iremos explorar logo abaixo em duas formas de aplicar em seu projeto. 
+Essa estrutura é perfeitamente representada também por tabelas e planilhas. Os arquivos no formato CSV, podem ser automaticamente convertidos para esse formato com a função *`csvdecode()`* que iremos explorar logo abaixo em duas formas de aplicar em seu projeto. 
 
 ### Porque isso importa?
 
@@ -71,7 +71,7 @@ Essa estrutura é perfeitamente representada também por tabelas e planilhas. Os
 - **Flexibilidade**: Você pode facilmente adicionar, remover ou modificar entradas no CSV sem precisar alterar o código do Terraform.
 - **D.R.Y**: Don't repeat yourself! Você pode usar o mesmo arquivo CSV em diferentes módulos ou projetos, tornando seu código mais modular e reutilizável.
 
-## 📁Exemplo 1 – Criando Entradas na Route Table com CSV
+## Exemplo 1 – Criando Entradas na Route Table com CSV
 
 Antes de tudo, vamos criar o nosso arquivo CSV chamado `vnet_routes.csv`, com as colunas necessárias:
 
@@ -89,7 +89,7 @@ route5,1.1.1.5/32,VirtualAppliance,10.0.0.1
 O *Local* será responsável por definir o valor *vnet_routes*, onde podemos relacionar diversas novas vezes a partir dele.
 O arquivo CSV precsia ser armazenado a partir do diretório raiz do modulo em referência.
 
-Para transformar a listagem acima no formato CSV. Utilizaremos a função `csvdecode()`. Dessa forma, o Tofu criará uma list(map(string)) automaticamente. 
+Para transformar a listagem acima no formato CSV. Utilizaremos a função *`csvdecode()`*. Dessa forma, o Tofu criará uma list(map(string)) automaticamente. 
 
 Para fins de demonstração, criei um output para demonstrar o resultado após a conversão do CSV.
 
@@ -102,13 +102,14 @@ output "vnet_routes" {
   value = local.vnet_routes
 }
 ```
+| ![tofu_output](output_locals.png) | 
+|:--:| 
+| *Exemplo Tofu output de csv para string(map)* |
 
-![tofu_output](output_locals.png)
-> Exemplo de output do locals
+
+#### Iteração da lista
 
 Após a definição dos nossos valores na string(map), faremos o consumo dela no bloco de recurso que declararemos a route table. 
-
-> Código copiado do repositório para fins de demonstração.
 
 ```hcl
 resource "azurerm_route" "vnet_routes" {
@@ -170,49 +171,46 @@ locals {
 - 🔍 Nesse exemplo estamos definindo em locals duas listas separadas. A primeira lista *csv_dns_zone_type_cname_drylabs_dev*, para finalidade de registros como CNAME e a segunda lista *csv_dns_zone_type_a_drylabs_dev* para tipos de registro A. Nesse etapa não estão codificadas como csv, porém contem todo o conteúdo necessário para serem consumidas como CSV.
 - 🔍 Ainda em *locals*, os valores *dns_zone_type_cname_drylabs_dev e dns_zone_type_a_drylabs_dev* são definidos como `csvdecode()`, respectivamente. Isso converte as strings em listas de mapas, permitindo o acesso aos dados de forma mais fácil.
 
+#### Iteração da lista
+
+Nesse momento, repetimos a mesma lógica utilizada no exemplo 1.
 
 ```hcl
-resource "azurerm_dns_cname_record" "main" {
-  for_each            = tomap({ for k in local.dns_zone_type_cname_drylabs_dev : k.name => k })
+resource "azurerm_dns_a_record" "main" {
+  for_each            = { for k in local.dns_zone_type_a_drylabs_dev : k.name => k }
   zone_name           = azurerm_dns_zone.main.name
   resource_group_name = azurerm_resource_group.main.name
 
-  name   = each.value.name
-  record = each.value.records
-  ttl    = each.value.ttl
+  name    = each.value.name
+  records = [each.value.records]
+  ttl     = each.value.ttl
 }
-
 ```
 
-### 🔍 O que está acontecendo?
-
-#### Expressão for_each
-
-`tomap({ for k in local.dns_zone_type_cname_drylabs_dev : k.name => k })`
-
-
-
-
-## ✅Resultado final 
+### ✅Resultado final 
 
 Para aplicar o código acima, foi utilizado o `tofu init, tofu plan -out tfplan e tofu apply "tfplan"`.
 
-Todas as rotas e registros DNS definidos nas planilhas serão criados automaticamente.
+Todas as rotas e registros DNS definidos nas planilhas serão criados automaticamente. Reutilizando o msemo trecho de código para criar entradas de DNS e rotas, você pode facilmente adicionar ou remover entradas no CSV sem precisar alterar o código do Tofu.
 
-![apply](tofu-apply.png)
+Além disso nesse exemplo não estamos fazendo uso de modulos, possibilitando reduzir ainda mais a complexidade do código e reduzindo o numero de repetições de código. Entretanto, não é a finalidade desse post.
+
+| ![apply](tofu-apply.png) | 
+|:--:| 
+| *Provisionamento dos recursos baseado em listas* |
+
+Chegamos ao final do nosso guia prático. Agora você tem uma compreensão sólida de como usar arquivos CSV no OpenTofu para criar e gerenciar recursos de forma eficiente.
+
+## 🧠Dicas úteis e referencias
+
+- ✅Prefira **for_each** ao invés de **count**: O **for_each** funciona melhor que **count** quando os dados são baseados em mapas. Isso possibilita uma fácil manutenção, pois a remoção de uma entrada não afetará no ciclo de vida dos demais recursos.
+- 🧩Campos opcionais - *como o next_hop_ip do primeiro exemplo* - podem ser tratados com ternários.
+- 🗃️Padronize os cabeçalhos do CSV: mantenha os nomes simples e sem espaços para facilitar o seu uso direto nas expressões each.value.
 
 
-🧠Dicas Úteis
+### 📚 Referências
 
-- ✅Prefira for_each ao invés de count: O for_each funciona melhor que count quando os dados são baseados em mapas. Isso possibilita uma fácil manutenção, pois a remoção de uma entrada não afetará no ciclo de vida dos demais recursos.
-  - 📌 Sempre use for dentro do for_each para transformar list em map, usando uma chave única.
-- 🧩Campos opcionais (como o next_hop_ip) podem ser tratados com ternários, como mostrado acima.
-- 🗃️Padronize os cabeçalhos do CSV: mantenha os nomes simples e sem espaços para facilitar o uso direto nas expressões each.value.
-
-
-📚 Referências
-
-- [Tofu - csvdecode()](https://opentofu.org/docs/language/functions/csvdecode/)
-- [Tofu - for_each](https://opentofu.org/docs/language/meta-arguments/for_each/)
-- [Tofu - Ternário / Conditional Expressions](https://opentofu.org/docs/language/expressions/conditionals/)
-- [Terraform - Heredoc Strings ](https://developer.hashicorp.com/terraform/language/expressions/strings)
+- [OpenTofu - csvdecode()](https://opentofu.org/docs/language/functions/csvdecode/)
+- [OpenTofu - for_each](https://opentofu.org/docs/language/meta-arguments/for_each/)
+- [OpenTofu - Ternário / Conditional Expressions](https://opentofu.org/docs/language/expressions/conditionals/)
+- [OpenTofu - Heredoc Strings ](https://opentofu.org/docs/language/expressions/strings/#indented-heredocs)
