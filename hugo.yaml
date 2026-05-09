@@ -44,10 +44,6 @@ Languages:
           name: "About"
           url: "/about/"
           weight: 30
-        - pageRef: "Resume"
-          name: "Resume"
-          url: "/resume/"
-          weight: 40
     params:
       sitename: "DryLabs"
       defaultColor: "dark"

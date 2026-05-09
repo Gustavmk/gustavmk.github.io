@@ -6,13 +6,18 @@ toc: false
 ---
 
 
-Eu sou um entusiasta de tecnologia, gosto de aprender e compartilhar conhecimento. 
+I am a technology enthusiast who enjoys learning and sharing knowledge.
 
-Para algumas empresas posso ser um [ "Cloud Engineer", "SRE", "Engenheiro de Confiabilidade", "DevOps Engineer" ] focado em infraestrutura, automação, plataformas de monitoramento, Linux, segurança, CI/CD, franksteins, software legado, monolitos, microserviços, Kubernetes, containers e a nuvem. 
+Depending on the organization, I can be seen as a Cloud Engineer, Site Reliability Engineer (SRE), Reliability Engineer, or DevOps Engineer, with a strong focus on infrastructure, automation, monitoring platforms, Linux, security, CI/CD, “Frankenstein” environments, legacy software, monoliths, microservices, Kubernetes, containers, and cloud technologies.
 
-Eu já trabalhei com diferentes infraestruturas, software-defined [Storage, Network] em datacenter on-prem e também em ambientes em nuvem, usando AWS e Azure.
+I have worked with a wide range of infrastructures, including software-defined storage and networking in on-premises datacenters, as well as cloud environments using AWS and Azure.
 
-As linguagens com as quais eu trabalho principalmente são Python, Powershell e Shell Script. Estou iniciando em estudos de Go e .NET para o desenvolvimento de software para melhorar minhas habilidades em software. 
+The primary languages I work with are Python, PowerShell, and Shell Script. I am also currently studying Go and .NET application development to further strengthen my software engineering skills.
 
-Além de ter super poderes no terminal, também sou corredor e busco uma vida integra e saudável.
+Beyond having “superpowers” in the terminal, I am also a runner and strive to maintain a balanced, healthy, and disciplined lifestyle.
 
+## My resume 
+
+You can learn more about my professional experiences, skills, and academic qualifications in my resume. It is available here for consultation or through my LinkedIn profile.
+
+- ***[MY RESUME](./resume.md)***
