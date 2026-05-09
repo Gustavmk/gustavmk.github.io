@@ -99,8 +99,8 @@ output "vnet_routes" {
   value = local.vnet_routes
 }
 ```
-| ![tofu_output](output_locals.png) | 
-|:--:| 
+|       ![tofu_output](output_locals.png)        |
+| :--------------------------------------------: |
 | *Example Tofu output from csv to list(object)* |
 
 
@@ -192,23 +192,23 @@ All routes and DNS records defined in the spreadsheets will be created automatic
 
 Additionally, in this example we're not using modules, allowing us to reduce code complexity even further and reduce code repetition. However, that's not the purpose of this post.
 
-| ![apply](tofu-apply.png) | 
-|:--:| 
+|        ![apply](tofu-apply.png)        |
+| :------------------------------------: |
 | *Resource provisioning based on lists* |
 
 We've reached the end of our practical guide. Now you have a solid understanding of how to use CSV files in OpenTofu to create and manage resources efficiently.
 
-## 🧠Dicas úteis e referencias
+## 🧠 Tips and Known Issues
 
-- ✅Prefira **for_each** ao invés de **count**: O **for_each** funciona melhor que **count** quando os dados são baseados em mapas. Isso possibilita uma fácil manutenção, pois a remoção de uma entrada não afetará no ciclo de vida dos demais recursos.
-- 🧩Campos opcionais - *como o next_hop_ip do primeiro exemplo* - podem ser tratados com ternários.
-- 🗃️Padronize os cabeçalhos do CSV: mantenha os nomes simples e sem espaços para facilitar o seu uso direto nas expressões each.value.
+- ✅ Prefer **for_each** instead of **count**. The **for_each** function works better when any change introduces or removes objects. It will improve maintainability lifecycle and reduce blast radius.
+- 🧩 Optional fields - *like the next_hop_ip from the first example* - can be handled with ternary expressions.
+- 🗃️ Standardize CSV headers: keep names simple and without spaces to make it easier to use directly in each.value expressions.
 
 
-### 📚 Referências
+### 📚 References
 
 - [OpenTofu - csvdecode()](https://opentofu.org/docs/language/functions/csvdecode/)
 - [OpenTofu - for_each](https://opentofu.org/docs/language/meta-arguments/for_each/)
-- [OpenTofu - Ternário / Conditional Expressions](https://opentofu.org/docs/language/expressions/conditionals/)
+- [OpenTofu - Ternary / Conditional Expressions](https://opentofu.org/docs/language/expressions/conditionals/)
 - [OpenTofu - Heredoc Strings ](https://opentofu.org/docs/language/expressions/strings/#indented-heredocs)
 - [DRY Coding with Terraform](https://jloudon.com/cloud/HashiTalks-ANZ-DRY-Coding-with-Terraform-CSVs-ForEach/)
