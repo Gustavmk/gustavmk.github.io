@@ -1,9 +1,8 @@
 
-install-theme:
-    cd site;
-    hugo new theme
+install-reqs:
+    apt install -y hugo
+    sudo npm install -g sass
 
 setup-hugo:
-    cd site
     hugo server --buildDrafts
     hugo server -D
